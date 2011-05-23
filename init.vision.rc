@@ -43,6 +43,11 @@ on fs
     chown system system /sys/class/leds/jogball-backlight/period
     chown system system /sys/class/leds/button-backlight/brightness
     chown system system /sys/class/leds/lcd-backlight/brightness
+
+    # flashlight
+    chown system camera /sys/class/leds/flashlight/brightness
+    chmod 0660          /sys/class/leds/flashlight/brightness
+
     #set radio_feedback permissions
     chown radio radio /dev/radio_feedback
     chmod 0660 /dev/radio_feedback
@@ -71,7 +76,7 @@ service wpa_supplicant /system/bin/logwrapper /system/bin/wpa_supplicant \
     disabled
     oneshot
 
-service dhcpcd /system/bin/dhcpcd -ABKL eth0
+service dhcpcd_eth0 /system/bin/dhcpcd -ABKL eth0
     disabled
     oneshot
 
@@ -98,7 +103,6 @@ service udhcpd /system/bin/udhcpd
 
 service rmt_storage /system/bin/rmt_storage /dev/block/mmcblk0p13 /dev/block/mmcblk0p14
     user root
-    disabled
 
 service htc_ebdlogd /system/bin/htc_ebdlogd -s -k -P 7
     user root
@@ -116,5 +120,3 @@ on property:ro.build.tags=test-keys
 on property:ro.build.tags=release-keys
     start htc_ebdlogd_rel
 
-on property:ro.emmc=1
-    start rmt_storage
